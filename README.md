@@ -46,8 +46,14 @@ Even just `/debug` or `/save` will help.
 ## Installation
 
 ```bash
-mkdir -p ~/.claude
-cp -r claude/commands ~/.claude/
-cp -r claude/agents ~/.claude/
-cp claude/CLAUDE.md ~/.claude/CLAUDE.md
+mkdir -p ~/.claude/commands ~/.claude/agents
+./sync-claude.sh
 ```
+
+To keep `~/.claude` in sync after updates:
+
+```bash
+./sync-claude.sh
+```
+
+> `sync-claude.sh` rsyncs `claude/commands/` and `claude/agents/` into `~/.claude/`. Copy `claude/CLAUDE.md` to `~/.claude/CLAUDE.md` manually if desired.

@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.3.0] - 2026-03-31
+
+### Added
+
+- `sync-claude.sh` — Sync script. Rsyncs `claude/commands/` and `claude/agents/` into `~/.claude/`. Replaces the manual `cp` install steps in README.
+
 ## [0.2.0] - 2026-03-31
 
 ### Added
