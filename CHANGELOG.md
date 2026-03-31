@@ -1,5 +1,32 @@
 # Changelog
 
+## [0.2.0] - 2026-03-31
+
+### Added
+
+**Commands** (`commands/`)
+
+- `question.md` — Question mode. Answers a specific codebase question using repo evidence; answers directly first, no implementation drift.
+- `save.md` — Save mode. Produces a concise markdown handoff from current conversation/task state; infers goal, blocker, and next step without explicit input.
+
+### Changed
+
+**Commands** (`commands/`)
+
+- `debug.md` — Default behavior now infers the current blocker from conversation, repo state, and visible failures when no explicit context is provided. Output renamed from `SUMMARY` to `DEBUG NOTE`. Format tightened: optional sections only appear when meaningful, `What I want to do next` → `Next action`.
+- `vet.md` — Default behavior now targets uncommitted diff (or last commit if clean). Added don't-ask-me zone. Output renamed from `REVIEW SUMMARY` to `VET NOTE`. Format tightened to match debug.md style.
+- `summary.md` — Removed. Replaced by `save.md`.
+
+**Agents** (`agents/`)
+
+- `debugger.md` — Added: prefer 1 best experiment over multiple equivalent options; if one hypothesis is clearly dominant, do not pad with weaker alternatives.
+- `navigator.md` — Added explicit default behavior: answer the specific repo question first, provide supporting references, do not implement unless asked.
+- `reviewer.md` — Replaced generic test guidance with explicit no-coverage-theater rule: only propose tests that catch realistic failure modes or protect important invariants.
+
+**CLAUDE.md**
+
+- Added sections: command vs agent preference, default command behavior, save behavior, exploration/debugging/review preference, output shaping.
+
 ## [0.1.0] - 2026-03-30
 
 ### Added

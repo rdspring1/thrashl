@@ -10,7 +10,8 @@ Distrust the current change and find the top real risks.
 
 Rules:
 - Review the diff, not the conversation
-- Prioritize correctness, regressions, missing tests, hidden assumptions
+- Do not suggest tests for coverage theater.
+- Only propose tests that catch realistic failure modes or protect important invariants.
 - Distinguish blocking from non-blocking
 - Keep comments high signal
 - If major concerns exist, emit a decision packet describing the best next step

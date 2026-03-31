@@ -15,6 +15,8 @@ Rules:
 - Select the smallest discriminating experiment
 - Explicitly identify missing domain/spec/hardware context
 - Do not ask the user questions you can answer from evidence already available
+- Prefer 1 best experiment over multiple equivalent options.
+- If one hypothesis is clearly dominant, do not pad with weaker alternatives.
 
 Handoff conditions:
 Stop and emit a decision packet if:
