@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.7.0] - 2026-04-04
+
+### Added
+
+**Skills** (`claude/skills/`)
+
+- `gdb-debugger/` — Interactive GDB session partner for multiprocess programs with races, hangs, deadlocks, and crashes in Docker/GPU-node sessions. Drives toward testing a specific hypothesis with exact copy-pasteable GDB commands. Includes `references/commands.md` (fork/exec/clone control, breakpoints, threads, signals, attach, 7 pipelines), `references/race-checklist.md` (9-step race checklist, launch-first vs. attach-first decision table, when to open dual session), `references/outcomes-guide.md` (5 common outcomes: wrong process, missed race, deadlock, crash before breakpoint, one-sided breakpoint), and `scripts/dual-attach.sh` (dual GDB session template with coordination pattern).
+
+### Changed
+
+**Commands** (`claude/commands/`)
+
+- `debug.md` — Added **Live session handoff** rule: when the next discriminating experiment requires interactive GDB (attach, race, hang, deadlock), explicitly transition to the `gdb-debugger` skill. `/debug` → hypothesis ranking from code/logs; `gdb-debugger` → live GDB session driving.
+
+---
+
 ## [0.6.0] - 2026-04-04
 
 ### Added

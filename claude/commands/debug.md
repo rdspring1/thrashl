@@ -80,6 +80,9 @@ Only ask the user if one of these is true:
 - experiment cost or risk is high
 - multiple branches remain equally plausible after reasonable inspection
 
+Live session handoff:
+When the next discriminating experiment requires a live GDB session — interactive process inspection, attach, race between parent and child, hang, or deadlock requiring stepping — invoke the `gdb-debugger` skill. `/debug` handles hypothesis ranking from code and logs; `gdb-debugger` drives the interactive GDB session. Transition explicitly: state the hypothesis, then hand off.
+
 Handoff conditions:
 Stop and produce a concise DEBUG NOTE if any of these are true:
 - a leading hypothesis clearly emerges
