@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.9.0] - 2026-04-04
+
+### Added
+
+**Skills** (`claude/skills/`)
+
+- `pytorch-profiler-trace/` — Capture and interpret PyTorch profiler traces for training and inference programs on GPU nodes. Encodes practical `torch.profiler` setup choices for CPU/CUDA hotspot tracing, kernel/stream timing, CUDA Graph behavior, distributed/NCCL overlap, and dataloader overhead. Includes `references/commands.md` (torch.profiler API reference, schedule params, output methods, 6 copy-pasteable setups), `references/fallback-table.md` (8-scenario decision table including nsys escalation), `references/trace-guide.md` (`key_averages()` column guide, Chrome/Perfetto trace reading, 6 common pathologies, Perfetto tips), and `scripts/profile-snippet.py` (three goal-driven templates: hotspot/graph/distributed with REPLACE markers, wall-time measurement, and Chrome trace export).
+
+---
+
 ## [0.8.0] - 2026-04-04
 
 ### Added
