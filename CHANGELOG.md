@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.4.0] - 2026-04-04
+
+### Added
+
+**Commands** (`commands/`)
+
+- `check.md` — State-snapshot mode. Reports current debug session state from externally grounded sources only (`debug-session.md` or explicit conversation ledger entries). Does not reconstruct state from inferred reasoning. Use during long silent debug sessions.
+
+**Agents** (`agents/`)
+
+- `explain.md` — Externally-grounded introspection specialist. Implements the same source contract and output structure as `/check`. Available as a persistent named agent alongside the debugger.
+
+### Changed
+
+**Commands** (`commands/`)
+
+- `debug.md` — Added four sections: experiment ledger (appends to `debug-session.md`), churn guard (mandatory CHECKPOINT after 2-3 low-information entries or repeated test-family churn; may resume only when confidence >= MEDIUM and no decision-relevant source is missing), evidence discipline (Observed facts / Hypotheses / Assumptions / Needed data; cite sources; never invent evidence), data-source policy (ask for external source only when missing semantics would change which branch to debug next). Added optional `Checkpoint` section to output format.
+
+**Agents** (`agents/`)
+
+- `debugger.md` — Added compact rules mirroring `debug.md`: experiment ledger, churn guard, evidence discipline, data-source policy.
+
 ## [0.3.0] - 2026-03-31
 
 ### Added
