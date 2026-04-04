@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.5.0] - 2026-04-04
+
+### Added
+
+**Skills** (`.claude/skills/`)
+
+- `cuobjdump-lowering-inspector/` — Inspect PTX and SASS lowering for CUDA snippets, `.cu` files, executables, cubins, and fatbins. Encodes nvcc/cuobjdump/nvdisasm/ptxas flag knowledge, input-type routing, fallback strategy, and insight-first output format. Primary use case: inline asm inspection where functional docs are incomplete and compiler output is the main source of truth. Includes `references/commands.md` (flag reference + pipelines), `references/fallback-table.md` (8-scenario decision table), `references/correlation-guide.md` (PTX↔SASS mapping guide), and `scripts/snippet-to-dump.sh` (compile-and-dump helper with 3-tier SASS fallback).
+
+---
+
 ## [0.4.0] - 2026-04-04
 
 ### Added
