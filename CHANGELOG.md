@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.8.0] - 2026-04-04
+
+### Added
+
+**Skills** (`claude/skills/`)
+
+- `pdb-debugger/` — Interactive pdb session partner for Python programs in Docker/GPU-node sessions. Covers single-process Python, torchrun multiprocess, and dataloader worker scenarios. Drives toward testing a specific hypothesis with exact copy-pasteable pdb commands and explicit handoff rules to `gdb-debugger` when the bug is below Python level. Includes `references/commands.md` (core pdb commands, conditional breakpoints, exception-driven debugging, 6 pipelines), `references/debug-checklist.md` (9-step debugging checklist, pdb→gdb switch decision table, torchrun/dataloader notes), `references/outcomes-guide.md` (5 common outcomes: wrong process/worker, exception before breakpoint, hang with no Python frame, bad tensor state, bug below Python), and `scripts/pdb-launcher.sh` (goal-driven launcher: basic/exception/rank0/hang).
+
+### Changed
+
+**Commands** (`claude/commands/`)
+
+- `debug.md` — Extended **Live session handoff** rule to route between `gdb-debugger` (C/CUDA, segfaults, C extension deadlocks) and `pdb-debugger` (Python, torchrun, dataloader, tensor state).
+
+---
+
 ## [0.7.0] - 2026-04-04
 
 ### Added

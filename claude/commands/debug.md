@@ -81,7 +81,11 @@ Only ask the user if one of these is true:
 - multiple branches remain equally plausible after reasonable inspection
 
 Live session handoff:
-When the next discriminating experiment requires a live GDB session — interactive process inspection, attach, race between parent and child, hang, or deadlock requiring stepping — invoke the `gdb-debugger` skill. `/debug` handles hypothesis ranking from code and logs; `gdb-debugger` drives the interactive GDB session. Transition explicitly: state the hypothesis, then hand off.
+When the next discriminating experiment requires a live interactive session — process inspection, attach, race, hang, or deadlock requiring stepping — invoke the appropriate skill:
+- `gdb-debugger` — C/CUDA processes, segfaults, C extension deadlocks, or any bug below Python level.
+- `pdb-debugger` — Python processes, torchrun, dataloader workers, tensor state, or Python-level control flow.
+
+`/debug` handles hypothesis ranking from code and logs. The skill drives the live session. Transition explicitly: state the hypothesis, then hand off.
 
 Handoff conditions:
 Stop and produce a concise DEBUG NOTE if any of these are true:
