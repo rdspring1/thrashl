@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.6.0] - 2026-04-04
+
+### Added
+
+**Skills** (`claude/skills/`)
+
+- `nsys-trace-profiler/` — Capture and interpret Nsight Systems traces for CUDA programs in Docker/GPU-node sessions. Encodes goal-driven nsys flag selection, CUDA Graph capture/replay semantics, launch latency analysis, CPU/GPU overlap inspection, and idle gap identification. Includes `references/commands.md` (nsys/nsys-stats flag reference + 9 pipelines), `references/fallback-table.md` (8-scenario decision table), `references/trace-guide.md` (timeline layer guide, graph capture/replay, overlap, sync stall patterns, nsys stats usage), and `scripts/capture-trace.sh` (goal-driven wrapper: basic/launch/graph/overlap/scoped).
+
+### Changed
+
+**Skills** (`claude/skills/`)
+
+- Relocated from `.claude/skills/` to `claude/skills/` to consolidate all Claude artifacts under `claude/`.
+
+- `cuobjdump-lowering-inspector/` — Arch notes updated: added `sm_100a` as a distinct target required for `.rs` (stochastic) rounding in `cvt.*` instructions (not supported on plain `sm_100`). Added note on `cvt.rs.satfinite.e2m1x4.f32` lowering to two sequential `F2FP.SATFINITE.E2M1.F32.PACK_AB_MERGE_C.RS` SASS instructions (confirmed CUDA 13.2 / sm_100a). All pipeline examples in `references/commands.md` and default arch in `scripts/snippet-to-dump.sh` updated from `sm_100`/`sm_90` to `sm_100a`.
+
+**Sync** (`sync-claude.sh`)
+
+- Updated skills source path from `.claude/skills/` to `claude/skills/` following the relocation above.
+
+---
+
 ## [0.5.0] - 2026-04-04
 
 ### Added
