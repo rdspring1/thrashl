@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.10.0] - 2026-04-04
+
+### Changed
+
+**Agents** (`claude/agents/`)
+
+- `debugger.md` — Added **Skill routing** block: 6-lane classification table (above-python, python-framework, perf-framework, perf-system, native-runtime, toolchain), lane declaration rule, skill commitment rule (one skill per turn, cheaper-first tie-breaking), and wrong-skill detection with lane-switch logging to `debug-session.md`.
+
+**Commands** (`claude/commands/`)
+
+- `debug.md` — Replaced narrow 2-skill "Live session handoff" (gdb/pdb only) with full 5-skill routing table covering all specialized debug skills, plus transition rules for lane switching and churn guard integration.
+- `check.md` — Added `Current lane` and `Active skill` fields to `CURRENT STATE` output format, sourced from `debug-session.md`; added lane/skill sourcing rule to core rules.
+
+---
+
 ## [0.9.0] - 2026-04-04
 
 ### Added

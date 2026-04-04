@@ -18,6 +18,7 @@ Core rules:
 - Do not reconstruct state from inferred reasoning or vibes.
 - Omit empty sections.
 - If no session note and no legible ledger in conversation, say so and stop.
+- If `debug-session.md` contains a Lane or Skill entry, report it; otherwise report UNKNOWN / NONE.
 
 Don't-ask-me zone:
 Do not interrupt the user for:
@@ -41,6 +42,9 @@ Goal:
 
 Leading hypothesis:
 <top hypothesis — sourced from debug-session.md or explicit conversation statement>
+
+Current lane: <above-python | python-framework | perf-framework | perf-system | native-runtime | toolchain | UNKNOWN>
+Active skill: <skill name or NONE>
 
 Experiment ledger:
 1. <hypothesis tested> | <exact change or command> | <result> | <interpretation>

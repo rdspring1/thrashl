@@ -80,12 +80,31 @@ Only ask the user if one of these is true:
 - experiment cost or risk is high
 - multiple branches remain equally plausible after reasonable inspection
 
-Live session handoff:
-When the next discriminating experiment requires a live interactive session — process inspection, attach, race, hang, or deadlock requiring stepping — invoke the appropriate skill:
-- `gdb-debugger` — C/CUDA processes, segfaults, C extension deadlocks, or any bug below Python level.
-- `pdb-debugger` — Python processes, torchrun, dataloader workers, tensor state, or Python-level control flow.
+Skill routing:
+Before any skill invocation, classify the bug by layer and commit to ONE skill.
 
-`/debug` handles hypothesis ranking from code and logs. The skill drives the live session. Transition explicitly: state the hypothesis, then hand off.
+| Layer            | Signals                                                           | Skill                        |
+|------------------|-------------------------------------------------------------------|------------------------------|
+| above-python     | env errors, import failures, launch config, infra                | NONE — stay in /debug        |
+| python-framework | exception, wrong output, tensor state, control flow,             | pdb-debugger                 |
+|                  | torchrun, dataloader worker                                       |                              |
+| perf-framework   | CPU/CUDA hotspot, step overhead, dataloader bottleneck           | pytorch-profiler-trace       |
+| perf-system      | CUDA Graph timing, NCCL overlap, launch latency, timeline        | nsys-trace-profiler          |
+| native-runtime   | race, hang, deadlock, fork/exec, segfault, C extension crash,    | gdb-debugger                 |
+|                  | no Python frame in hang, SIGABRT/SIGSEGV                         |                              |
+| toolchain        | PTX/SASS lowering, inline asm, cubin, compiler output            | cuobjdump-lowering-inspector |
+
+Transition rules:
+- State the lane and chosen skill before invoking it. One skill per turn.
+- If ambiguous, pick the cheaper to falsify first (pdb before gdb; pytorch-profiler before nsys).
+- If the skill yields no signal: switch lane in one step; log to debug-session.md.
+- Invoking the same skill twice in a row without new evidence between invocations counts as a
+  repeated test-family variation — the churn guard applies immediately.
+- After 4 total skill invocations without a supported hypothesis, trigger CHECKPOINT regardless
+  of how many lane switches occurred.
+- Do not switch back to a lane already tried unless new evidence explicitly justifies it.
+  Back-and-forth oscillation (A → B → A) without new evidence is a churn-guard trigger.
+- /debug handles hypothesis ranking. The skill drives the live session.
 
 Handoff conditions:
 Stop and produce a concise DEBUG NOTE if any of these are true:
