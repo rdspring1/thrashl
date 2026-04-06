@@ -1,0 +1,5 @@
+CUDA Graph captured and replaying. Observed 2ms idle gap between launches.
+GPU timeline: intermittent CPU/GPU synchronization stalls between graph replays.
+Launch latency suspected: CPU queuing overhead visible in timeline.
+Note: per-node kernel timing inside CUDA Graph not visible via torch.profiler;
+      Nsight Systems timeline needed to inspect launch latency and graph node execution.

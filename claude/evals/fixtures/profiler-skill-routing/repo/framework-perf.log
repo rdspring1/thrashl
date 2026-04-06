@@ -1,0 +1,8 @@
+Training step 100: total=450ms
+  data loading:  180ms    <-- suspected dataloader bottleneck
+  forward pass:  120ms
+  backward pass: 140ms
+  optimizer:      10ms
+
+Step time variance: high (±60ms). Single-GPU. num_workers=4.
+Suspected CPU/CUDA hotspot or dataloader overhead. No CUDA Graph in use.
