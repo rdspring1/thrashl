@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "train.py", line 42, in forward
+    output = self.fc(hidden)
+  File "torch/nn/modules/linear.py", line 114, in forward
+    return F.linear(input, self.weight, self.bias)
+RuntimeError: mat1 and mat2 shapes cannot be multiplied (4x512 vs 256x10)
+
+Process exited with code 1.

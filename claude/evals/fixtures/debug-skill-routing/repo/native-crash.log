@@ -1,0 +1,4 @@
+[parent pid=4201] forking worker process
+[child pid=4202] exec: ./worker
+Segmentation fault (core dumped)
+(no Python traceback — child exited with SIGSEGV before any Python frame)

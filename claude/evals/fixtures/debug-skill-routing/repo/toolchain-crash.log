@@ -1,0 +1,12 @@
+nvcc error   : 'ptxas' died with status 0x4
+
+--- PTX assembly (excerpt) ---
+.visible .entry _Z9my_kernelPf(.param .u64 param0)
+{
+  asm volatile("cvt.rn.e2m1x4.f32 %0, %1;" : "=r"(out) : "f"(in));
+}
+
+ptxas fatal  : Unresolved extern function '_custom_asm_helper'
+
+Note: SASS lowering for cvt.rn.e2m1x4 on sm_90a is undocumented;
+      cuobjdump/nvdisasm needed to verify actual SASS output.
