@@ -35,6 +35,16 @@ Only ask the user if one of these is true:
 - destructive, expensive, or high-risk experiment
 - repo evidence is insufficient
 
+Execution budget:
+One real implementation attempt. One validation run. That is the full budget for this mode.
+
+Hard stop rule:
+If validation fails after a real attempt, stop immediately.
+Do not investigate the failure.
+Do not rank hypotheses.
+Do not make another edit.
+Emit SUMMARY, set Best next mode: Debugger, and stop.
+
 Handoff conditions:
 Stop and produce a SUMMARY if any of these are true:
 - first meaningful test/build failure after a real attempt
@@ -98,3 +108,5 @@ Best next mode:
 
 Task:
 $ARGUMENTS
+
+After emitting this SUMMARY, write it to `save.md` in the current working directory using the Write tool.

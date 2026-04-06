@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.11.0] - 2026-04-05
+
+### Changed
+
+**Commands** (`claude/commands/`)
+
+- `impl.md` — Added **Execution budget** block: one real implementation attempt plus one validation run is the explicit budget for this mode. Added **Hard stop rule**: if validation fails after a real attempt, stop immediately — do not investigate, rank hypotheses, or make another edit; emit SUMMARY and route to Debugger. The budget framing replaces the implicit "stop if failure" condition with a named contract.
+
+- `debug.md` — Added **Lessons learned** block to the DEBUG NOTE output format. Emitted only when hypothesis is confirmed, fix is verified, and the takeaway is nontrivial. Three optional lines: new checklist item, new source policy, new skill routing hint. Omit any line with no specific reusable content.
+
+- `save.md` — Declared `save.md` as the canonical state file shared by `/check`, `/debug`, and the next session. Added step: if `debug-session.md` exists, incorporate a summary of its experiment ledger into the Evidence section. Clarified that writing `save.md` is normative, not incidental.
+
+- `check.md` — Updated source priority order to reflect immediacy: (1) explicit ledger entries in current conversation, (2) `debug-session.md`, (3) `save.md`. Stop at the first legible source. Rationale: `/check` is used mid-session to inspect a silent active debug session; the current conversation is the most authoritative source.
+
+---
+
 ## [0.10.0] - 2026-04-04
 
 ### Changed

@@ -2,7 +2,9 @@
 description: Save the current state as a concise markdown handoff
 ---
 
-Produce a concise SAVE NOTE in markdown.
+Produce a SAVE NOTE and write it to `save.md` in the current working directory.
+
+`save.md` is the canonical state file. `/check`, `/debug`, and the next session read from it.
 
 Default behavior:
 - If no explicit context is provided, summarize the current conversation/task state.
@@ -10,7 +12,8 @@ Default behavior:
   - the recent conversation
   - the current repo state
   - the latest visible summaries, failures, diffs, or conclusions
-- Write this as a markdown note and save it to `save.md` in the current working directory.
+- If `debug-session.md` exists in the current directory, incorporate a summary of its experiment ledger into the Evidence section.
+- Write the note to `save.md` in the current working directory using the Write tool.
 
 Rules:
 - If you are stopping, do not merely describe the problem.

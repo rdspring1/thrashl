@@ -160,6 +160,12 @@ Needs from user:
 Best next mode:
 <Implementer|Debugger|Reviewer|Navigator|NONE>
 
+Lessons learned: (emit only when hypothesis confirmed + fix verified + takeaway is nontrivial)
+- New checklist item: <what to check first next time this symptom appears>
+- New source policy: <what the code or config should enforce to prevent recurrence>
+- New skill routing hint: <when to route to which lane or skill earlier>
+Omit any line that has no specific, reusable content.
+
 Checkpoint: (emit only when churn guard triggers)
 Top hypothesis: <hypothesis and supporting evidence>
 Competing hypothesis: <strongest alternative and evidence>
@@ -169,3 +175,5 @@ Blocked on missing source: <YES/NO — specify source if YES>
 
 Context:
 $ARGUMENTS
+
+After emitting this DEBUG NOTE, write it to `save.md` in the current working directory using the Write tool.

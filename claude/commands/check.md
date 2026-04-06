@@ -8,16 +8,17 @@ Goal:
 Report the current debug session state from externally grounded sources only.
 
 Default behavior:
-- Read `debug-session.md` in the current directory if present.
-- If no session file, fall back to ledger entries explicitly visible in the conversation.
-- Do not reconstruct state from inferred reasoning or vibes.
-- If no session file and no legible ledger in conversation, say so and stop.
+Read sources in this order (most immediate to most durable):
+1. Explicit ledger entries in the current conversation (immediate state)
+2. `debug-session.md` in the current directory (experiment ledger)
+3. `save.md` in the current directory (global state, most stale)
+
+Stop at the first source that contains legible state. Do not merge across sources unless both are present and non-contradictory. If no legible source exists, say so and stop.
 
 Core rules:
-- Source everything from `debug-session.md` if present, otherwise from explicit conversation entries only.
+- Source everything from the grounding sources above only.
 - Do not reconstruct state from inferred reasoning or vibes.
 - Omit empty sections.
-- If no session note and no legible ledger in conversation, say so and stop.
 - If `debug-session.md` contains a Lane or Skill entry, report it; otherwise report UNKNOWN / NONE.
 
 Don't-ask-me zone:
