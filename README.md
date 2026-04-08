@@ -57,3 +57,35 @@ To keep `~/.claude` in sync after updates:
 ```
 
 > `sync-claude.sh` rsyncs `claude/commands/` and `claude/agents/` into `~/.claude/`. Copy `claude/CLAUDE.md` to `~/.claude/CLAUDE.md` manually if desired.
+
+---
+
+## Codex CLI
+
+Codex CLI is supported too.
+
+The Codex port keeps the same control model:
+- bounded implementation
+- hypothesis-first debugging
+- evidence discipline
+- replayable state in `save.md`
+
+But it uses Codex-native surfaces instead of imitating Claude commands:
+- `AGENTS.md` as the main doctrine file
+- prompt templates instead of slash commands
+- small helper scripts where deterministic behavior is better than prompting
+
+Install it with:
+
+```bash
+mkdir -p ~/.codex
+./sync-codex.sh
+```
+
+To keep `~/.codex` in sync after updates:
+
+```bash
+./sync-codex.sh
+```
+
+> `sync-codex.sh` copies `codex/AGENTS.md` plus `codex/prompts/` and `codex/scripts/` into `~/.codex/`.

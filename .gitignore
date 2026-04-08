@@ -1,2 +1,6 @@
+.codex
+.claude
 claude/evals/runs/
 claude/evals/results/
+codex/evals/runs/
+codex/evals/results/

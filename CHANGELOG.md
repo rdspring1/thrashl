@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.12.0] - 2026-04-07
+
+### Added
+
+**Codex** (`codex/`)
+
+- `AGENTS.md` — Codex CLI doctrine file. Translates the Claude-side workflow into Codex-native terms while keeping Claude as the source of truth. Preserves bounded implementation, debug churn guard, evidence discipline, `save.md` replayability, and one-best-next-skill routing.
+- `prompts/` — Prompt-template equivalents for the main thrashl surfaces: `clarify.md`, `plan.md`, `impl.md`, `debug.md`, `vet.md`, `save.md`, and `check.md`. These replace Claude-style slash commands with reusable Codex session templates.
+- `scripts/check_state.py` — Deterministic state snapshot helper. Reads `debug-session.md` first, then `save.md`, and stops cleanly if neither contains legible state.
+- `scripts/debug_guard.py` — Deterministic debug ledger helper. Appends experiment entries to `debug-session.md` and flags simple churn-checkpoint conditions from recent low-information or repeated experiment-family runs.
+- `README.md` — Codex port overview, surface mapping, doctrine split (`AGENTS.md` vs prompts vs scripts), non-portable Claude surfaces, minimal v1 scope, and migration order with Claude remaining primary.
+
+### Changed
+
+**Sync** (`sync-codex.sh`)
+
+- Added `sync-codex.sh` — Codex install/sync analogue to `sync-claude.sh`. Copies `codex/AGENTS.md` plus `codex/prompts/` and `codex/scripts/` into `~/.codex/`, creating target directories as needed.
+
+**README**
+
+- Added a `Codex CLI` section describing the Codex-native port and install flow via `./sync-codex.sh`.
+
 ## [0.11.0] - 2026-04-05
 
 ### Changed
