@@ -35,6 +35,18 @@ Only ask the user if one of these is true:
 - destructive, expensive, or high-risk experiment
 - repo evidence is insufficient
 
+Canonical-command check:
+Before running any test, build, or run command, check for a documented invocation in:
+1. README.md — code blocks under install / test / run sections
+2. Makefile — target names and recipes
+3. pyproject.toml — [tool.pytest.ini_options], [project.scripts]
+4. tox.ini / noxfile.py — envlist and commands
+5. package.json — "scripts" section
+6. .github/workflows/*.yml — run: steps
+
+If a canonical form exists, use it. Do not construct a variant when the repo defines one.
+Record in the ledger: Canonical: YES (used documented command) | NO (guessed variant) | UNKNOWN (no docs found).
+
 Execution budget:
 One real implementation attempt. One validation run. That is the full budget for this mode.
 

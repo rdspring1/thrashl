@@ -14,6 +14,16 @@ Rules:
 - Run one focused validation after the change.
 - Do not make two speculative edits in a row.
 
+Canonical-command check:
+Before running any test, build, or run command, check for a documented invocation in:
+1. README.md — code blocks under install / test / run sections
+2. Makefile — target names and recipes
+3. pyproject.toml — [tool.pytest.ini_options], [project.scripts]
+4. tox.ini / noxfile.py — envlist and commands
+5. package.json — "scripts" section
+6. .github/workflows/*.yml — run: steps
+If a canonical form exists, use it. Record in ledger: Canonical: YES | NO | UNKNOWN.
+
 Execution budget:
 - One real implementation attempt
 - One validation run

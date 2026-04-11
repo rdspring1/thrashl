@@ -22,6 +22,8 @@ class Entry:
     interpretation: str
     lane: str | None = None
     skill: str | None = None
+    canonical: str | None = None
+    failure_class: str | None = None
 
 
 def parse_entries(text: str) -> list[Entry]:
@@ -44,6 +46,8 @@ def parse_entries(text: str) -> list[Entry]:
                     interpretation=fields["interpretation"].upper(),
                     lane=fields.get("lane"),
                     skill=fields.get("skill"),
+                    canonical=fields.get("canonical"),
+                    failure_class=fields.get("failure-class"),
                 )
             )
     return entries
@@ -66,6 +70,10 @@ def append_entry(args: argparse.Namespace) -> int:
         entry.append(f"Lane: {args.lane}")
     if args.skill:
         entry.append(f"Skill: {args.skill}")
+    if args.canonical:
+        entry.append(f"Canonical: {args.canonical.upper()}")
+    if args.failure_class:
+        entry.append(f"Failure-class: {args.failure_class.lower()}")
 
     prefix = ""
     if LEDGER_PATH.exists():
@@ -96,7 +104,15 @@ def checkpoint(_: argparse.Namespace) -> int:
         families = [action_family(entry.action) for entry in recent]
         repeated_family = len(set(families)) < len(families)
 
-    trigger = low_info_count >= 2 or repeated_family
+    # Detect repeat-same-command pattern: last 2 entries ran same action, both non-SUPPORTED
+    repeat_same_command = False
+    if len(entries) >= 2:
+        last_two = entries[-2:]
+        same_action = action_family(last_two[0].action) == action_family(last_two[1].action)
+        both_non_supported = all(e.interpretation != "SUPPORTED" for e in last_two)
+        repeat_same_command = same_action and both_non_supported
+
+    trigger = low_info_count >= 2 or repeated_family or repeat_same_command
     top = entries[-1]
 
     sys.stdout.write("CHECKPOINT\n")
@@ -107,6 +123,11 @@ def checkpoint(_: argparse.Namespace) -> int:
     sys.stdout.write(f"Last interpretation: {top.interpretation}\n")
     sys.stdout.write(f"Recent low-information entries: {low_info_count}\n")
     sys.stdout.write(f"Repeated experiment family: {'YES' if repeated_family else 'NO'}\n")
+    sys.stdout.write(f"Repeat same command (no meaningful change): {'YES' if repeat_same_command else 'NO'}\n")
+    if top.failure_class:
+        sys.stdout.write(f"Failure classification: {top.failure_class}\n")
+    if top.canonical:
+        sys.stdout.write(f"Canonical invocation used: {top.canonical}\n")
     return 0 if trigger else 1
 
 
@@ -125,6 +146,11 @@ def build_parser() -> argparse.ArgumentParser:
     )
     append.add_argument("--lane")
     append.add_argument("--skill")
+    append.add_argument("--canonical", choices=["yes", "no", "unknown"],
+                        help="Whether a documented canonical invocation was used")
+    append.add_argument("--failure-class",
+                        choices=["code", "invocation", "environment", "requirement", "unknown"],
+                        help="Failure classification for this experiment")
     append.set_defaults(func=append_entry)
 
     checkpoint_parser = subparsers.add_parser(

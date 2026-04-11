@@ -19,7 +19,7 @@ Core rules:
 - Source everything from the grounding sources above only.
 - Do not reconstruct state from inferred reasoning or vibes.
 - Omit empty sections.
-- If `debug-session.md` contains a Lane or Skill entry, report it; otherwise report UNKNOWN / NONE.
+- If `debug-session.md` contains a Lane, Skill, Canonical, or Failure-class entry, report it; otherwise report UNKNOWN / NONE.
 
 Don't-ask-me zone:
 Do not interrupt the user for:
@@ -46,6 +46,9 @@ Leading hypothesis:
 
 Current lane: <above-python | python-framework | perf-framework | perf-system | native-runtime | toolchain | UNKNOWN>
 Active skill: <skill name or NONE>
+Last command: <exact command from most recent ledger entry, or UNKNOWN>
+Repo invocation match: <YES | NO | UNKNOWN>
+Repeat failure count: <N — identical error with no meaningful change between runs | 0>
 
 Experiment ledger:
 1. <hypothesis tested> | <exact change or command> | <result> | <interpretation>
@@ -61,6 +64,8 @@ Confidence: <HIGH|MEDIUM|LOW|VERY_LOW>
 
 Blocker:
 <exact missing context — not vague>
+
+Blocker classification: <code | invocation | environment | requirement | UNKNOWN>
 
 Context:
 $ARGUMENTS

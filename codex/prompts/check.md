@@ -21,7 +21,7 @@ Rules:
 - Stop at the first legible source for the chosen view.
 - Do not merge contradictory sources.
 - Do not reconstruct state from vibes.
-- If debug-session.md includes lane or skill, report them.
+- If debug-session.md includes lane, skill, Canonical, or Failure-class, report them.
 - If no legible source exists, say so and stop.
 
 Output shape:
@@ -39,6 +39,9 @@ Current lane:
 
 Active skill:
 <skill or NONE>
+Last command: <exact command from most recent ledger entry, or UNKNOWN>
+Repo invocation match: <YES | NO | UNKNOWN>
+Repeat failure count: <N — identical error with no meaningful change between runs | 0>
 
 Experiment ledger:
 1. <entry>
@@ -54,4 +57,6 @@ Confidence:
 
 Blocker:
 <exact missing context>
+
+Blocker classification: <code | invocation | environment | requirement | UNKNOWN>
 ```

@@ -55,6 +55,9 @@
 - Prefer one discriminating experiment over multiple speculative changes.
 - If two speculative edits have already happened, stop and summarize instead of continuing.
 - If semantics are underdetermined, identify the exact missing context rather than guessing.
+- If the same command fails twice with no meaningful change between runs, classify it as
+  invocation, requirement, or environment mismatch before retrying. Check README, Makefile,
+  and pyproject.toml for the canonical invocation.
 
 ## Review preferences
 - Review the diff, not the story.

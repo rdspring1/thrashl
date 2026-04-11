@@ -1,5 +1,31 @@
 # Changelog
 
+## [0.13.0] - 2026-04-11
+
+### Changed
+
+**Commands** (`claude/commands/`)
+
+- `debug.md` — Added **Failure classification** section: before retrying a failing command, classify it as invocation mismatch, requirement mismatch, environment mismatch, or true code bug. If classification is invocation, requirement, or environment, emit a DEBUG NOTE with the recommended fix and stop — do not run the same failing command again. Extended **churn guard** with a third trigger: the same command fails twice with materially the same error and no meaningful change (code edit, env change, dependency install, config update) occurred between runs — treat this as invocation/requirement/environment mismatch, not a code bug. Added optional `Canonical:` and `Failure-class:` fields to the **experiment ledger** format. Added `Failure classification:` to the **checkpoint** output.
+
+- `impl.md` — Added **Canonical-command check** section before the execution budget: before running any test, build, or run command, check for a documented invocation in README.md, Makefile, pyproject.toml, tox.ini / noxfile.py, package.json, and CI workflow files. If a canonical form exists, use it instead of a guessed variant. Record `Canonical: YES / NO / UNKNOWN` in the ledger.
+
+- `check.md` — Added three fields to `CURRENT STATE` output: `Last command` (exact command from most recent ledger entry), `Repo invocation match` (YES / NO / UNKNOWN), and `Repeat failure count` (identical error with no meaningful change between runs). Added `Blocker classification` field (code / invocation / environment / requirement / UNKNOWN). Updated core rules to surface `Canonical` and `Failure-class` ledger entries when present.
+
+**Doctrine** (`claude/CLAUDE.md`)
+
+- Added one bullet to **Debugging preferences**: if the same command fails twice with no meaningful change between runs, classify it as invocation, requirement, or environment mismatch before retrying; check README, Makefile, and pyproject.toml for the canonical invocation.
+
+**Codex** (`codex/`)
+
+- `prompts/debug.md` — Parity with `claude/commands/debug.md`: added failure classification section, extended churn guard with same-command-same-error trigger, and added `Failure classification:` to the checkpoint output shape.
+
+- `prompts/impl.md` — Parity with `claude/commands/impl.md`: added canonical-command check section before execution budget.
+
+- `prompts/check.md` — Parity with `claude/commands/check.md`: added `Last command`, `Repo invocation match`, `Repeat failure count`, and `Blocker classification` to the output shape.
+
+- `scripts/debug_guard.py` — Added `canonical` and `failure_class` fields to the `Entry` dataclass and ledger parser. Added `--canonical` and `--failure-class` CLI arguments to the `append` subcommand. Added repeat-same-command detection to the `checkpoint` subcommand: triggers when the last two entries share the same action family and both interpretations are non-SUPPORTED. Checkpoint output now emits `Failure classification:` and `Canonical invocation used:` when present.
+
 ## [0.12.0] - 2026-04-07
 
 ### Added

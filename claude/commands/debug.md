@@ -32,6 +32,8 @@ Experiment ledger:
   - Exact change or command run
   - Observed result
   - Interpretation: supported / weakened / ruled out / inconclusive
+  - Canonical: YES (used documented command) | NO (guessed variant) | UNKNOWN  (optional)
+  - Failure-class: code | invocation | environment | requirement | UNKNOWN  (optional)
 - Do not repeat a ledgered experiment unless the rerun purpose is explicit
   (valid reasons: control, post-upstream-change, nondeterminism confirmation).
 - The ledger is the source of truth for /check, explain, and the churn guard.
@@ -40,7 +42,10 @@ Churn guard:
 - Trigger a mandatory CHECKPOINT when:
   - 2-3 consecutive ledger entries yield low-information results (inconclusive or
     weakened with no new branch opened), OR
-  - The last experiment family has been retried with only small variations
+  - The last experiment family has been retried with only small variations, OR
+  - The same command fails twice with materially the same error and no meaningful change
+    (code edit, env change, dependency install, config update) occurred between runs —
+    treat this as invocation/requirement/environment mismatch, not a code bug
 - At a CHECKPOINT, the debugger must pause. It may resume only when BOTH:
   - Confidence is at least MEDIUM
   - No decision-relevant external source is identified as missing
@@ -65,6 +70,21 @@ Data-source policy:
   in repo, spec ambiguity that determines the fix direction)
 - Do not ask for sources that would not change your next step
 - When asking, state exactly which behavior is underdetermined and why it matters
+
+Failure classification:
+Before retrying a failing command, classify the failure. Do this once — do not loop.
+
+- Invocation mismatch: wrong command variant, wrong module path, wrong args
+  → check README, Makefile, pyproject.toml for the canonical invocation; use it; stop retrying guessed forms
+- Requirement mismatch: test expects behavior the code does not implement, or test uses a stale interface
+  → do not debug code; emit a DEBUG NOTE classifying it as requirement drift and stop
+- Environment mismatch: missing dependency, wrong interpreter, missing env var
+  → do not debug code; surface the environment fix and stop
+- True code bug: invocation correct, env correct, requirement current
+  → proceed with normal hypothesis-first debug path
+
+If classification is invocation, requirement, or environment: emit a DEBUG NOTE with the
+classification and recommended fix. Do not run the same failing command again.
 
 Don't-ask-me zone:
 Do not interrupt the user for:
@@ -172,6 +192,7 @@ Competing hypothesis: <strongest alternative and evidence>
 Untested assumption: <what has not been tested>
 Best next experiment: <one concrete next step>
 Blocked on missing source: <YES/NO — specify source if YES>
+Failure classification: <invocation|requirement|environment|code|UNKNOWN>
 
 Context:
 $ARGUMENTS
