@@ -24,6 +24,23 @@ Before running any test, build, or run command, check for a documented invocatio
 6. .github/workflows/*.yml — run: steps
 If a canonical form exists, use it. Record in ledger: Canonical: YES | NO | UNKNOWN.
 
+Mutation policy:
+In autonomous runs, classify every action before running it.
+
+Always allowed — proceed without checkpoint:
+- Reading files; git log/diff/status; running tests; lint/typecheck
+- Building artifacts in CWD; creating or editing files in CWD; git add, git commit (local)
+
+Checkpoint before running — write save.md first, then proceed:
+- Package install/remove (pip, npm, cargo, apt); env var writes; .env changes
+- Schema migrations; deleting files; renaming files across modules
+- git merge, rebase, cherry-pick; writing outside CWD; any --force flag
+
+Never without human approval — stop immediately, write save.md, do not execute:
+- git push --force; git reset --hard; git branch -D
+- Drop/truncate database tables; production environment writes
+- Secret/credential-bearing commands; CI/CD config changes; bulk file deletion
+
 Execution budget:
 - One real implementation attempt
 - One validation run
@@ -33,6 +50,11 @@ Hard stop:
 - Do not debug inside this mode.
 - Write a concise handoff to save.md.
 - Best next mode becomes debug.
+- If the same command fails twice with materially the same error and no meaningful change
+  occurred between runs: classify as invocation | requirement | environment | code and stop;
+  do not retry.
+- In autonomous runs: checkpoint (write save.md, pause) after 20+ tool invocations since
+  last checkpoint, or if scope expands beyond the preflight contract.
 
 Output shape:
 

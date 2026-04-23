@@ -69,5 +69,12 @@ Optional sections: include only if meaningful
 ### Best Next Mode
 <Implementer|Debugger|Reviewer|Navigator|NONE>
 
+### Preflight  (required before autonomous runs; omit for interactive saves)
+- Bounded scope: <files/modules in scope; what is explicitly out of scope>
+- Canonical command: <exact run/test/build command>
+- Stop condition: <what done looks like, or what triggers escalation>
+- Risk level: <LOW|MEDIUM|HIGH>
+- Expected artifact: <test result, file, or output when complete>
+
 Context:
 $ARGUMENTS

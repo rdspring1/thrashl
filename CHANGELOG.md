@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.14.0] - 2026-04-23
+
+### Changed
+
+**Doctrine** (`claude/CLAUDE.md`, `codex/AGENTS.md`)
+
+- Added **High-Autonomy Mode** section to both doctrine files (mirrored). Covers: worker doctrine (full-auto is a worker mode, not an authority mode; execution speed does not change judgment); preflight requirement (a `save.md` Preflight block is required before any long autonomous run); mutation policy (three classes: always-allowed, checkpoint-before-running, never-without-human-approval — with examples for each); checkpoint cadence (triggers: 20+ tool invocations since last checkpoint, 2+ consecutive low-information results in impl mode, any checkpoint-class mutation, scope drift beyond preflight contract, confidence below MEDIUM).
+
+**Commands** (`claude/commands/`)
+
+- `impl.md` — Added **Mutation policy** section after the canonical-command-check: three classes (always-allowed, checkpoint-before-running, never-without-human-approval) applied in autonomous runs. Added two new **Handoff conditions**: (1) same command fails twice with materially the same error and no meaningful change between runs — classify as invocation/requirement/environment/code and stop, do not retry; (2) in autonomous runs, checkpoint after 20+ tool invocations or if scope expands beyond preflight contract.
+
+- `debug.md` — Strengthened churn guard language: in full-auto mode all three triggers are mandatory hard stops; failure classification must be emitted before any retry regardless of mode.
+
+- `save.md` — Added `### Preflight` optional block to the output schema. Required before autonomous runs; omitted for interactive saves. Fields: bounded scope, canonical command, stop condition, risk level, expected artifact.
+
+**Codex** (`codex/`)
+
+- `prompts/impl.md` — Parity with `claude/commands/impl.md`: added mutation policy section and two new hard-stop conditions (repeated-invariant-failure classify-and-stop; autonomous-run checkpoint cadence).
+
+- `prompts/save.md` — Parity with `claude/commands/save.md`: added `### Preflight` optional block to the output schema.
+
+---
+
 ## [0.13.0] - 2026-04-11
 
 ### Changed

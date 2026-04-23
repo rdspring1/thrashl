@@ -46,6 +46,8 @@ Churn guard:
   - The same command fails twice with materially the same error and no meaningful change
     (code edit, env change, dependency install, config update) occurred between runs —
     treat this as invocation/requirement/environment mismatch, not a code bug
+  In full-auto mode all three triggers are mandatory hard stops. Failure classification
+  must be emitted before any retry, regardless of mode.
 - At a CHECKPOINT, the debugger must pause. It may resume only when BOTH:
   - Confidence is at least MEDIUM
   - No decision-relevant external source is identified as missing

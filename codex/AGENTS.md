@@ -195,3 +195,50 @@ Only ask when one of these is true:
 - Omit empty sections.
 - Prefer one concrete next action over a list of equivalent options.
 - If confidence is low, say so explicitly and stop cleanly.
+
+## High-Autonomy Mode
+
+Full-auto execution (Codex YOLO, Claude full-auto) is a worker mode, not an authority mode.
+It does not expand the permission surface or relax stop discipline.
+
+### Worker doctrine
+- Worker mode changes execution speed, not judgment.
+- Faster execution means faster mistakes. Stop discipline matters more, not less.
+- Prefer one tool family at a time. Do not interleave debug tool families in autonomous runs.
+- Stop when the run contract becomes ambiguous. Do not extrapolate scope.
+
+### Preflight requirement
+Before any long autonomous run, a `save.md` preflight is required.
+If `save.md` does not exist or has no Preflight block, emit one before proceeding.
+
+### Mutation policy
+Three classes of actions in autonomous runs:
+
+**Always allowed** — proceed without checkpoint:
+- Reading files; git log/diff/status; running tests; lint/typecheck
+- Building artifacts in CWD; creating or editing files in CWD
+- git add, git commit (local)
+
+**Checkpoint before running** — write `save.md` first, then proceed:
+- Package install or remove (pip, npm, cargo, apt)
+- Environment variable writes, .env changes
+- Schema migrations; deleting files; renaming files across modules
+- git merge, rebase, cherry-pick
+- Writing outside CWD; any `--force` flag (outside git push/reset)
+
+**Never without human approval** — stop immediately, write `save.md`, do not execute:
+- git push --force; git reset --hard; git branch -D
+- Drop or truncate database tables
+- Production environment writes
+- Secret or credential-bearing commands
+- CI/CD configuration changes; bulk file deletion
+
+### Checkpoint cadence
+Trigger a checkpoint (write `save.md`, pause) when:
+- 20+ tool invocations since the last checkpoint or session start
+- 2+ consecutive low-information results in impl mode
+- Before any checkpoint-class mutation (see mutation policy above)
+- Change scope expands beyond the preflight contract
+- Confidence drops below MEDIUM
+
+At checkpoint: write `save.md` with current state, `### What Changed`, and `### Preflight` (original contract).

@@ -47,6 +47,23 @@ Before running any test, build, or run command, check for a documented invocatio
 If a canonical form exists, use it. Do not construct a variant when the repo defines one.
 Record in the ledger: Canonical: YES (used documented command) | NO (guessed variant) | UNKNOWN (no docs found).
 
+Mutation policy:
+In autonomous runs, classify every action before running it.
+
+Always allowed — proceed without checkpoint:
+- Reading files; git log/diff/status; running tests; lint/typecheck
+- Building artifacts in CWD; creating or editing files in CWD; git add, git commit (local)
+
+Checkpoint before running — write save.md first, then proceed:
+- Package install/remove (pip, npm, cargo, apt); env var writes; .env changes
+- Schema migrations; deleting files; renaming files across modules
+- git merge, rebase, cherry-pick; writing outside CWD; any --force flag
+
+Never without human approval — stop immediately, write save.md, do not execute:
+- git push --force; git reset --hard; git branch -D
+- Drop/truncate database tables; production environment writes
+- Secret/credential-bearing commands; CI/CD config changes; bulk file deletion
+
 Execution budget:
 One real implementation attempt. One validation run. That is the full budget for this mode.
 
@@ -65,6 +82,11 @@ Stop and produce a SUMMARY if any of these are true:
 - confidence falls below MEDIUM
 - you cannot explain why the next step should work
 - missing functional-doc or hardware-context information is blocking progress
+- the same command fails twice with materially the same error and no meaningful change
+  occurred between runs: classify as invocation | requirement | environment | code and stop;
+  do not retry the same failing command
+- in autonomous runs: 20+ tool invocations since last checkpoint, or scope expands beyond
+  preflight contract — write save.md and pause before continuing
 
 When stopping, output this exact format:
 
