@@ -73,6 +73,16 @@
   - discriminate between plausible incorrect implementations
   - protect against likely regressions
 
+### Review economy
+- A review is a prioritized decision aid, not a list of every imperfection.
+- Every finding has a priority: HIGH, MEDIUM, LOW-MEDIUM, or LOW. Anything not fitting these four does not belong in the review.
+- BLOCKING = HIGH | MEDIUM | LOW-MEDIUM. NON-BLOCKING = LOW.
+- Caps shown per review: at most 10 BLOCKING, at most 3 NON-BLOCKING.
+- Always report the true count of BLOCKING (and NON-BLOCKING) issues found at the top of the review, even when the shown list is capped — readers must know how much was elided.
+- Collapse excess LOW issues into a single pattern-level note rather than dropping them silently.
+- Do not play both sides. Be opinionated. Prefer "change X because Y" over "consider …".
+- Minor imperfections are intentionally omitted unless they affect correctness, maintainability, or test signal.
+
 ## Summary format preference
 - Good summaries should usually include:
   - goal

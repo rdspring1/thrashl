@@ -1,5 +1,35 @@
 # Changelog
 
+## [0.17.0] - 2026-05-22
+
+### Changed
+
+**Doctrine** (`claude/CLAUDE.md`, `codex/AGENTS.md`)
+
+- Added **Review Economy** (mirrored). A review is a prioritized decision aid, not a list of every imperfection. Every finding carries a priority on the scale HIGH / MEDIUM / LOW-MEDIUM / LOW; BLOCKING = HIGH | MEDIUM | LOW-MEDIUM, NON-BLOCKING = LOW. Caps shown per review: at most 10 BLOCKING, at most 3 NON-BLOCKING. The true count of BLOCKING (and NON-BLOCKING) issues found must always be reported at the top of the review, even when the shown list is capped — readers must know how much was elided. Excess LOW issues collapse into a single pattern-level note rather than dropping silently. Be opinionated; do not play both sides.
+
+**Commands** (`claude/commands/`)
+
+- `vet.md` — Rewrote as a senior-reviewer prompt. Scope selection now recognizes PR-style branches and reviews `git diff origin/main...HEAD` when the working tree is clean and ahead of `origin/main`; falls back to uncommitted diff or last commit. Added review-only enforcement (no edits during `/vet`; route fixes via Best next mode), context-gathering rule (read diff first, then surrounding files), review-economy block (priority scale, caps, true-count header, pattern-level collapse, "do not play both sides"), test economy lens, and diff economy lens. Folded the prior `Surgical Simplicity review` block into the diff/test economy lenses. Replaced the old `VET NOTE` schema with a checklist-driven template (`Review scope` with true counts → `Checklist` → `Findings` with `[BLOCKING / HIGH|MEDIUM|LOW-MEDIUM]` and `[NON-BLOCKING / LOW]` tags → `Test economy` → `Diff economy` → `Verification` → `Summary` → `Best next mode`).
+
+**Agents** (`claude/agents/`)
+
+- `reviewer.md` — Aligned rules to the new severity model and caps. References the priority scale, the BLOCKING / NON-BLOCKING derivation, the 10 / 3 shown caps, the true-count header rule, and "do not play both sides." Handoff condition is now completion of the six-box checklist.
+
+**Codex** (`codex/`)
+
+- `prompts/vet.md` — Parity with `claude/commands/vet.md`: same scope detection, review-only rule, review-economy block, test/diff economy lenses, and output template.
+
+### Added
+
+**Evals** (`claude/evals/fixtures/`, `codex/evals/fixtures/`)
+
+- `claude/evals/fixtures/vet-review-economy/` — Catches the failure mode the Review Economy rule is designed to fix: defensive over-reporting with 7–10 small findings and no clear ranking. SPEC.md treats `repo/.baseline/` as `origin/main` and asks the agent to write its full VET output to `repo/vet-output.md`. Fixture ships one HIGH-priority blocker (`format_currency` silently ignores its `currency` parameter), one LOW-MEDIUM blocker (defensive `try/except` for an impossible state in `to_cents`), and LOW-priority noise (single-callsite helper `_is_negative`, unnecessary `monkeypatch.setenv` in `test_parse_currency`, duplicate test file `test_currency_extra.py`). Oracle checks: (1) `vet-output.md` exists, (2) all eight template sections present, (3) `BLOCKING issues found: <n>` and `NON-BLOCKING issues found: <n>` true-count header lines present, (4) shown caps respected (≤10 BLOCKING, ≤3 NON-BLOCKING tags), (5) at least one `[BLOCKING / HIGH]` finding present, (6) HIGH finding references `format_currency` or the ignored `currency` parameter, (7) test bloat flagged in Test economy or as a NON-BLOCKING finding (monkeypatch / duplicate test / fold), (8) no edits to source files during `/vet` (review-only) compared against the fixture's seeded `repo/` snapshot, not `.baseline/`. Informational checks for pattern-level collapse of excess LOW issues and absence of both-sides hedging language.
+
+- `codex/evals/fixtures/codex-vet-review-economy/` — Codex-side mirror with identical fixture, oracle, and SPEC pointing at the Codex `vet` prompt.
+
+---
+
 ## [0.16.0] - 2026-05-22
 
 ### Changed
