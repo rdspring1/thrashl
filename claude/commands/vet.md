@@ -35,6 +35,17 @@ Test rules:
   2. why it matters
   3. what bug it could catch
 
+Test economy review:
+For every new test or test file in the diff, judge:
+- Real failure mode? (or coverage theater)
+- Smallest test that protects the invariant? (or over-scoped)
+- Could this fold into an existing test in the same file?
+- Is the monkeypatch / mock necessary, or would a direct assertion suffice?
+- Is new helper / fixture scaffolding justified by 3+ reuses?
+
+If any answer is no, list it under Blocking concerns with the smaller form
+proposed (e.g., "fold into test_foo_handles_edge_cases as a parametrize case").
+
 Don't-ask-me zone:
 Do not interrupt the user for:
 - style-only preferences

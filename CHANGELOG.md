@@ -1,5 +1,41 @@
 # Changelog
 
+## [0.15.0] - 2026-05-22
+
+### Changed
+
+**Doctrine** (`claude/CLAUDE.md`, `codex/AGENTS.md`)
+
+- Added **Test Economy** section to both doctrine files (mirrored). Prefer extending an existing test over creating a new one; new test files or functions only for distinct failure modes, invariants no existing test guards, or discrimination between plausible incorrect implementations. Monkeypatch, mocking, or new fixtures require a one-sentence justification. New tests must record in PR / `save.md` why they could not be folded into an existing test. Defensive scaffolding (helpers, builders, parametrize matrices) only when the same setup is reused 3+ times.
+
+**Commands** (`claude/commands/`)
+
+- `debug.md` — Promoted the experiment ledger to a **hard precondition**: before starting the next experiment, the previous experiment must be appended to `debug-session.md` via Write or Edit with the full required-field set. A skipped append is itself a churn-guard trigger (added to the churn-guard list as a mandatory hard stop in all modes). Added explicit anti-fabrication escape valve: if a missing entry cannot be honestly reconstructed from visible conversation evidence, append a `## Experiment N — GAP` marker rather than inventing a retroactive hypothesis, command, or result.
+
+- `check.md` — Tightened core rules to refuse vibe-based reconstruction. If `debug-session.md` is missing or has zero entries, report `Experiment ledger: MISSING — /debug has run without writing the ledger` and stop. If the ledger contains a `GAP` marker, report it verbatim and cap confidence at `LOW` for that span. If a leading hypothesis exists in conversation but no ledger entry backs it, report it as `ungrounded` and label confidence `VERY_LOW`.
+
+- `vet.md` — Added **Test economy review** block to test rules. For every new test or test file, judge: real failure mode vs coverage theater; smallest test that protects the invariant; could fold into existing test in the same file; monkeypatch/mock necessity; helper/fixture scaffolding justified by 3+ reuses. Failed answers are listed under Blocking concerns with the smaller form proposed.
+
+- `impl.md` — Added short **Test economy** block before the canonical-command check: extend an existing test in the same file before creating a new one; new test only for a distinct failure mode or invariant; justify monkeypatch/mock use in a comment or `save.md` note.
+
+**Codex** (`codex/`)
+
+- `prompts/debug.md` — Replaced the symmetric churn guard with an asymmetric variant: continue debugging autonomously while ALL of (previous experiment appended to `debug-session.md`, confidence ≥ MEDIUM, last 2 experiments not both inconclusive, same skill/tool family not used 4+ times without a supported hypothesis) hold. Stop and emit a checkpoint on ANY of: repeated invariant failure, missing requirement, destructive or checkpoint-class action needed, confidence below MEDIUM, same command failing twice with no meaningful change. Preserves Codex's stronger ledger discipline as the reason it earns longer autonomous runs.
+
+- `prompts/vet.md` — Parity with `claude/commands/vet.md`: added Test economy review block to rules.
+
+- `prompts/impl.md` — Parity with `claude/commands/impl.md`: added Test economy block before canonical-command check.
+
+### Added
+
+**Evals** (`claude/evals/fixtures/`, `codex/evals/fixtures/`)
+
+- `claude/evals/fixtures/claude-debug-ledger-write/` — Catches the Claude failure mode the ledger precondition is designed to fix. SPEC.md drives /debug on a buggy `parse_amount` (off-by-one slice) that requires at least 2 experiments. Oracle checks: (1) `debug-session.md` exists, (2) ≥2 grounded entries with the required fields (Hypothesis, Observed result, Interpretation) — GAP markers count as warnings, not real entries, (3) `save.md` exists with a leading hypothesis, (4) leading hypothesis is grounded in the ledger by keyword match.
+
+- `codex/evals/fixtures/codex-test-bloat-guard/` — Catches the Codex failure mode the Test Economy rule is designed to fix. SPEC.md asks Codex to add a single test asserting `parse_currency("")` raises `ValueError`. Fixture ships a pure-function module, a parametrized existing test, and a baseline `conftest.py`. Oracle checks: (1) no new `.py` file under `tests/`, (2) `test_currency.py` extended to cover the empty-string ValueError case, (3) no MagicMock / monkeypatch.setattr / mocker / unittest.mock unless `save.md` justifies under Test Economy, (4) `tests/conftest.py` byte-equal to the shipped baseline.
+
+---
+
 ## [0.14.0] - 2026-04-23
 
 ### Changed

@@ -23,15 +23,23 @@ Before retrying a failing command, classify it once:
 - True code bug → proceed with normal hypothesis-first path
 If classification is invocation, requirement, or environment: emit a DEBUG NOTE and stop.
 
-Churn guard:
-- If 2-3 consecutive experiments are low-information, pause.
-- If the same experiment family is retried with small variations, pause.
-- If confidence falls below MEDIUM, pause.
-- If the same command fails twice with materially the same error and no meaningful change
-  (code edit, env change, dependency install) occurred between runs, pause and classify as
-  invocation/requirement/environment mismatch — not a code bug.
-- At pause, emit a checkpoint summary instead of continuing.
-  Include: Failure classification: <invocation|requirement|environment|code|UNKNOWN>
+Churn guard (relaxed when ledger is current):
+You may continue debugging autonomously as long as ALL of these hold:
+- The previous experiment was appended to debug-session.md before this one started.
+- Confidence is at least MEDIUM.
+- The last 2 experiments produced new information (not both inconclusive).
+- The same skill/tool family has not been used 4+ times without a supported hypothesis.
+
+Stop and emit a checkpoint when ANY of these are true:
+- Repeated invariant failure (same assertion, same evidence, no new data).
+- Missing requirement: the spec is underdetermined; further work is guesswork.
+- A destructive or checkpoint-class action is needed (see mutation policy).
+- Confidence drops below MEDIUM.
+- The same command fails twice with no meaningful change between runs —
+  classify as invocation|requirement|environment, do not debug code.
+
+At pause, emit Failure classification: <invocation|requirement|environment|code|UNKNOWN>
+and the checkpoint summary block instead of continuing.
 
 Output shape:
 

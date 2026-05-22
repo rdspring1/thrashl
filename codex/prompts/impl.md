@@ -14,6 +14,13 @@ Rules:
 - Run one focused validation after the change.
 - Do not make two speculative edits in a row.
 
+Test economy:
+When adding tests as part of an implementation:
+- Extend an existing test in the same file before creating a new one.
+- Add a new test only for a distinct failure mode or invariant.
+- Justify monkeypatch / mock use in a comment or save.md note.
+See Test Economy in AGENTS.md.
+
 Canonical-command check:
 Before running any test, build, or run command, check for a documented invocation in:
 1. README.md — code blocks under install / test / run sections

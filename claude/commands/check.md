@@ -17,7 +17,15 @@ Stop at the first source that contains legible state. Do not merge across source
 
 Core rules:
 - Source everything from the grounding sources above only.
-- Do not reconstruct state from inferred reasoning or vibes.
+- Do not reconstruct state from inferred reasoning, prior conversation
+  summaries, or recent tool output. If `debug-session.md` is missing or has
+  zero experiment entries, report:
+    Experiment ledger: MISSING — /debug has run without writing the ledger
+  and stop. Do not synthesize a ledger from memory.
+- If `debug-session.md` contains a `GAP` marker entry, report it verbatim
+  under Experiment ledger and label confidence at most LOW for that span.
+- If a leading hypothesis exists in conversation but no ledger entry backs
+  it, report it as "ungrounded" and label confidence VERY_LOW.
 - Omit empty sections.
 - If `debug-session.md` contains a Lane, Skill, Canonical, or Failure-class entry, report it; otherwise report UNKNOWN / NONE.
 

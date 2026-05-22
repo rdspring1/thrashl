@@ -124,6 +124,21 @@
 - Do not suggest tests for coverage theater.
 - Only propose tests that catch realistic failure modes, validate important invariants, or protect against likely regressions.
 
+## Test Economy
+
+Prefer extending an existing test over creating a new one.
+
+- Add a new test file or new test function only when one of these is true:
+  - it covers a distinct failure mode not asserted anywhere
+  - it validates an invariant no existing test guards
+  - it discriminates between two plausible incorrect implementations
+- Before adding monkeypatch, mocking, or new fixtures, justify in one
+  sentence why a direct assertion or an existing fixture is insufficient.
+- If adding a new test, record in the PR / save.md note WHY it could not
+  be folded into an existing test. One sentence is enough.
+- Defensive scaffolding (helper classes, builder utilities, parametrize
+  matrices) is not free. Add it only when the same setup is reused 3+ times.
+
 ## Output shaping
 - Omit trivial or empty sections.
 - Prefer one concrete next action over a vague menu of possibilities.

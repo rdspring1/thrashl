@@ -188,6 +188,21 @@ Only ask when one of these is true:
 - the experiment is destructive, expensive, or high-risk
 - repo evidence is insufficient
 
+## Test Economy
+
+Prefer extending an existing test over creating a new one.
+
+- Add a new test file or new test function only when one of these is true:
+  - it covers a distinct failure mode not asserted anywhere
+  - it validates an invariant no existing test guards
+  - it discriminates between two plausible incorrect implementations
+- Before adding monkeypatch, mocking, or new fixtures, justify in one
+  sentence why a direct assertion or an existing fixture is insufficient.
+- If adding a new test, record in the PR / save.md note WHY it could not
+  be folded into an existing test. One sentence is enough.
+- Defensive scaffolding (helper classes, builder utilities, parametrize
+  matrices) is not free. Add it only when the same setup is reused 3+ times.
+
 ## Output Shaping
 
 - Answer the actual question first.

@@ -35,6 +35,13 @@ Only ask the user if one of these is true:
 - destructive, expensive, or high-risk experiment
 - repo evidence is insufficient
 
+Test economy:
+When adding tests as part of an implementation:
+- Extend an existing test in the same file before creating a new one.
+- Add a new test only for a distinct failure mode or invariant.
+- Justify monkeypatch / mock use in a comment or save.md note.
+See Test Economy in CLAUDE.md.
+
 Canonical-command check:
 Before running any test, build, or run command, check for a documented invocation in:
 1. README.md — code blocks under install / test / run sections

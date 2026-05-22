@@ -25,15 +25,26 @@ Core rules:
 - Prefer one concrete next action over a vague menu of possibilities.
 - Omit trivial or empty fields.
 
-Experiment ledger:
-- Maintain a running ledger in `debug-session.md` at the current folder (create if absent).
-- For each experiment, append:
+Experiment ledger (hard precondition):
+- Maintain `debug-session.md` at the current folder (create if absent).
+- BEFORE starting the next experiment, the previous experiment must be appended
+  to `debug-session.md` via Write or Edit. The append must include:
   - Hypothesis being tested
   - Exact change or command run
   - Observed result
   - Interpretation: supported / weakened / ruled out / inconclusive
-  - Canonical: YES (used documented command) | NO (guessed variant) | UNKNOWN  (optional)
-  - Failure-class: code | invocation | environment | requirement | UNKNOWN  (optional)
+  - Canonical: YES (used documented command) | NO (guessed variant) | UNKNOWN
+  - Failure-class: code | invocation | environment | requirement | UNKNOWN
+- If the append was skipped, that is itself a churn-guard trigger. Stop and:
+  - If the missing experiment can be honestly reconstructed from visible
+    evidence (the exact command and its output are still in the current
+    conversation), write the entry citing that evidence, then resume.
+  - Otherwise, append a gap marker:
+      `## Experiment N — GAP: ran outside ledger discipline, no reliable record`
+    and emit a DEBUG NOTE. Do not invent a retroactive hypothesis,
+    command, or result from memory.
+- Do not summarize multiple experiments into a single retroactive block.
+  One experiment → one ledger entry, written before the next experiment starts.
 - Do not repeat a ledgered experiment unless the rerun purpose is explicit
   (valid reasons: control, post-upstream-change, nondeterminism confirmation).
 - The ledger is the source of truth for /check, explain, and the churn guard.
@@ -45,8 +56,9 @@ Churn guard:
   - The last experiment family has been retried with only small variations, OR
   - The same command fails twice with materially the same error and no meaningful change
     (code edit, env change, dependency install, config update) occurred between runs —
-    treat this as invocation/requirement/environment mismatch, not a code bug
-  In full-auto mode all three triggers are mandatory hard stops. Failure classification
+    treat this as invocation/requirement/environment mismatch, not a code bug, OR
+  - A ledger entry was skipped between two experiments (mandatory hard stop in all modes).
+  In full-auto mode all triggers are mandatory hard stops. Failure classification
   must be emitted before any retry, regardless of mode.
 - At a CHECKPOINT, the debugger must pause. It may resume only when BOTH:
   - Confidence is at least MEDIUM
