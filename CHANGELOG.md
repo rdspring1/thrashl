@@ -1,5 +1,35 @@
 # Changelog
 
+## [0.16.0] - 2026-05-22
+
+### Changed
+
+**Doctrine** (`claude/CLAUDE.md`, `codex/AGENTS.md`)
+
+- Replaced **Test Economy** with **Surgical Simplicity** (mirrored). The new section subsumes the test-specific rules as one bullet and adds general scope-discipline rules: every changed line traces to the task, a bug, an invariant, or a verified cleanup; no speculative abstractions, single-use helpers, defensive null checks, or fallbacks for impossible states; match existing repo patterns and reject drive-by refactors; name ambiguous semantics in `save.md` or as a `debug-session.md` GAP entry rather than guessing; declare an observable success criterion before the first edit. Justification keyword in `save.md` and eval oracles is now `surgical simplicity`.
+
+**Commands** (`claude/commands/`)
+
+- `impl.md` — Renamed the `Test economy` block to `Surgical Simplicity`. Requires the agent to declare a success criterion and scope fence before the first edit; lists out-of-scope edits as a hard-stop handoff trigger.
+- `vet.md` — Collapsed the `Test economy review` block into a single `Surgical Simplicity review` covering both test and non-test bloat: single-use helpers, knobs with no consumer, defensive scaffolding for impossible states, drive-by refactors, new test files when an existing test could be extended, unjustified mocking, and new files when an existing one would work.
+- `debug.md` — Added one bullet to the experiment-ledger section: if two plausible semantics differ materially, append a `## Experiment N — GAP: ambiguous semantics, …` entry instead of guessing.
+
+**Codex** (`codex/`)
+
+- `prompts/impl.md`, `prompts/vet.md`, `prompts/debug.md` — Parity with the Claude side: same renames, same scope-fence rule, same GAP bullet.
+
+**Evals**
+
+- `codex/evals/fixtures/codex-test-bloat-guard/` — Migrated the justification keyword from `test economy` to `surgical simplicity` in both `oracle.py` and `SPEC.md`. Existing structure unchanged.
+
+### Added
+
+**Evals** (`claude/evals/fixtures/`)
+
+- `claude/evals/fixtures/surgical-simplicity-guard/` — Claude-side eval mirroring `codex-test-bloat-guard` and extending it. SPEC asks the agent to add an empty-string `ValueError` test to `parse_currency` while staying inside a declared scope fence (`tests/test_currency.py` only — `currency.py` already has the fix). Oracle reuses the four test-bloat checks and adds: (5) no edits to files outside the declared scope fence (compared against `.baseline/` snapshots) unless `save.md` justifies under `Surgical Simplicity`; (6) no newly-added function or class in `src` with one or fewer non-definition references (single-use helper detection) unless `save.md` justifies. The same `surgical simplicity` justification string clears both new checks.
+
+---
+
 ## [0.15.0] - 2026-05-22
 
 ### Changed

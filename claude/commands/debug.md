@@ -47,6 +47,10 @@ Experiment ledger (hard precondition):
   One experiment → one ledger entry, written before the next experiment starts.
 - Do not repeat a ledgered experiment unless the rerun purpose is explicit
   (valid reasons: control, post-upstream-change, nondeterminism confirmation).
+- If two plausible semantics differ materially and the next experiment
+  would require choosing between them, append a
+  `## Experiment N — GAP: ambiguous semantics, <one-line description>`
+  entry instead of guessing. See Surgical Simplicity in CLAUDE.md.
 - The ledger is the source of truth for /check, explain, and the churn guard.
 
 Churn guard:

@@ -13,16 +13,21 @@ Rules:
 - Do not suggest tests for coverage theater.
 - Propose only small, high-value tests.
 
-Test economy review:
-For every new test or test file in the diff, judge:
-- Real failure mode? (or coverage theater)
-- Smallest test that protects the invariant? (or over-scoped)
-- Could this fold into an existing test in the same file?
-- Is the monkeypatch / mock necessary, or would a direct assertion suffice?
-- Is new helper / fixture scaffolding justified by 3+ reuses?
+Surgical Simplicity review:
+For each changed line, judge whether it traces to the task, a real
+failure mode, or a verified invariant. List under Blocking concerns
+any of:
+- new helpers / functions with exactly one callsite
+- new config knobs, parameters, or flags with no current consumer
+- defensive try/except, null checks, or fallbacks for impossible states
+- edits to adjacent code not required by the task (drive-by refactors)
+- new test files when an existing test could be extended
+- monkeypatch / mock / fixture scaffolding without a one-sentence
+  justification
+- new files when an existing file would work
 
-If any answer is no, list it under Blocking concerns with the smaller form
-proposed (e.g., "fold into test_foo_handles_edge_cases as a parametrize case").
+For each, propose the smaller form (inline the helper, remove the
+knob, delete the defensive branch, fold into existing test).
 
 Output shape:
 

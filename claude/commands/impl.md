@@ -35,12 +35,17 @@ Only ask the user if one of these is true:
 - destructive, expensive, or high-risk experiment
 - repo evidence is insufficient
 
-Test economy:
-When adding tests as part of an implementation:
-- Extend an existing test in the same file before creating a new one.
-- Add a new test only for a distinct failure mode or invariant.
-- Justify monkeypatch / mock use in a comment or save.md note.
-See Test Economy in CLAUDE.md.
+Surgical Simplicity:
+- Before the first edit, state the success criterion (one observable
+  check) and the scope fence (which files you expect to touch). No
+  criterion or no fence = no edit. Write both to save.md if autonomous.
+- Edits to files outside the declared scope fence are scope drift.
+  Hard stop, update save.md, then decide whether to expand the fence
+  or split the task.
+- No drive-by refactors, no defensive scaffolding, no single-use
+  helpers. For tests: extend an existing test before adding a new
+  one; justify monkeypatch / mock in save.md.
+See Surgical Simplicity in CLAUDE.md.
 
 Canonical-command check:
 Before running any test, build, or run command, check for a documented invocation in:
@@ -94,6 +99,7 @@ Stop and produce a SUMMARY if any of these are true:
   do not retry the same failing command
 - in autonomous runs: 20+ tool invocations since last checkpoint, or scope expands beyond
   preflight contract — write save.md and pause before continuing
+- edits unexpectedly touch files outside the declared scope fence
 
 When stopping, output this exact format:
 

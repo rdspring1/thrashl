@@ -14,12 +14,17 @@ Rules:
 - Run one focused validation after the change.
 - Do not make two speculative edits in a row.
 
-Test economy:
-When adding tests as part of an implementation:
-- Extend an existing test in the same file before creating a new one.
-- Add a new test only for a distinct failure mode or invariant.
-- Justify monkeypatch / mock use in a comment or save.md note.
-See Test Economy in AGENTS.md.
+Surgical Simplicity:
+- Before the first edit, state the success criterion (one observable
+  check) and the scope fence (which files you expect to touch). No
+  criterion or no fence = no edit. Write both to save.md if autonomous.
+- Edits to files outside the declared scope fence are scope drift.
+  Hard stop, update save.md, then decide whether to expand the fence
+  or split the task.
+- No drive-by refactors, no defensive scaffolding, no single-use
+  helpers. For tests: extend an existing test before adding a new
+  one; justify monkeypatch / mock in save.md.
+See Surgical Simplicity in AGENTS.md.
 
 Canonical-command check:
 Before running any test, build, or run command, check for a documented invocation in:
@@ -62,6 +67,8 @@ Hard stop:
   do not retry.
 - In autonomous runs: checkpoint (write save.md, pause) after 20+ tool invocations since
   last checkpoint, or if scope expands beyond the preflight contract.
+- If edits unexpectedly touch files outside the declared scope fence, hard stop and
+  update save.md before continuing.
 
 Output shape:
 

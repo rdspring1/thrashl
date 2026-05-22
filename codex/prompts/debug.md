@@ -14,6 +14,10 @@ Rules:
 - Prefer one discriminating experiment over multiple speculative changes.
 - Maintain debug-session.md as the experiment ledger.
 - Use codex/scripts/debug_guard.py when deterministic checkpointing is useful.
+- If two plausible semantics differ materially and the next experiment
+  would require choosing between them, append a
+  `## Experiment N — GAP: ambiguous semantics, <one-line description>`
+  entry instead of guessing. See Surgical Simplicity in AGENTS.md.
 
 Failure classification:
 Before retrying a failing command, classify it once:

@@ -124,20 +124,33 @@
 - Do not suggest tests for coverage theater.
 - Only propose tests that catch realistic failure modes, validate important invariants, or protect against likely regressions.
 
-## Test Economy
+## Surgical Simplicity
 
-Prefer extending an existing test over creating a new one.
+Every changed line should trace directly to the task, a bug, an
+invariant, or a verified cleanup caused by the change. If a line can
+be removed and the task still passes, remove it.
 
-- Add a new test file or new test function only when one of these is true:
-  - it covers a distinct failure mode not asserted anywhere
-  - it validates an invariant no existing test guards
-  - it discriminates between two plausible incorrect implementations
-- Before adding monkeypatch, mocking, or new fixtures, justify in one
-  sentence why a direct assertion or an existing fixture is insufficient.
-- If adding a new test, record in the PR / save.md note WHY it could not
-  be folded into an existing test. One sentence is enough.
-- Defensive scaffolding (helper classes, builder utilities, parametrize
-  matrices) is not free. Add it only when the same setup is reused 3+ times.
+- No speculative abstractions, helpers, config knobs, parameters, or
+  defensive scaffolding without a real failure mode or 3+ reuse.
+  Single-use helpers belong inline.
+- No defensive try/except, null checks, or fallbacks for states that
+  cannot occur given current callers.
+- Match existing repo patterns. Do not improve adjacent code unless
+  the task requires it. Drive-by refactors are noise and count as
+  scope drift.
+- If the task is ambiguous and two plausible semantics differ
+  materially, stop and name the ambiguity in save.md or as a
+  `debug-session.md` GAP entry. Do not silently choose.
+- Define one observable success criterion before the first impl edit
+  or the second debug loop. No criterion = no edit.
+- Tests follow the same rule. Prefer extending an existing test over
+  creating a new one. Add a new test only for a distinct failure
+  mode, an invariant no existing test guards, or to discriminate
+  between plausible incorrect implementations. Justify monkeypatch
+  / mock / new fixture in one sentence.
+- Every new file, abstraction, parameter, or test counts against the
+  task budget. Justify each in one sentence in save.md under a
+  `Surgical Simplicity:` line.
 
 ## Output shaping
 - Omit trivial or empty sections.
