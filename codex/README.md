@@ -8,7 +8,7 @@ The design goal is not to imitate Claude Code's surface area. The goal is to pre
 - hypothesis-first debugging
 - explicit handoffs
 - evidence discipline
-- replayable state in `save.md`
+- conditional durable replay state in `save.md`
 - active debug history in `debug-session.md`
 
 Claude remains the source of truth. If this folder drifts from [`claude/CLAUDE.md`](/home/me/thrashl/claude/CLAUDE.md), update this port to match the Claude-side doctrine instead of inventing a Codex-only variant.
@@ -104,8 +104,8 @@ This folder preserves the core doctrine with the smallest useful surface:
 - `AGENTS.md` carries the doctrine.
 - `prompts/*.md` replace custom commands.
 - `scripts/debug_guard.py` appends experiments to [`debug-session.md`](/home/me/thrashl/debug-session.md) and flags churn checkpoints.
-- `scripts/check_state.py --view active` prefers the active debug ledger, while `--view replay` treats [`save.md`](/home/me/thrashl/save.md) as the source of truth.
-- `save.md` remains the canonical replayable handoff file.
+- `scripts/check_state.py --view active` prefers the active debug ledger, while `--view replay` treats [`save.md`](/home/me/thrashl/save.md) as the source of truth and reports `No durable save snapshot found` when it is absent.
+- `save.md` remains the canonical replayable handoff file when written.
 - `debug-session.md` remains the authoritative active debug ledger, not the long-term replay source.
 
 That is enough to preserve:

@@ -50,6 +50,43 @@ Include when relevant:
 
 Do not stop with vague narration.
 
+## Save Policy
+
+`save.md` is the canonical cross-session replay and resume artifact when it is written.
+Not every mode exit requires writing `save.md`.
+
+Write `save.md` only when durable replay/resume value is high. A concise chat summary is enough when work is successful, tiny, local, obvious, validated, non-destructive, and confidence is `HIGH`.
+
+Must write `save.md` when:
+
+- the user explicitly asks to save
+- stopping due to failure, blocker, ambiguity, missing source data, or missing context
+- crossing mode boundaries after nontrivial work
+- validation failed, or expected validation could not be run
+- a destructive/checkpoint-class action was proposed or taken
+- an external-path write was proposed or taken
+- work touched 3+ files
+- confidence is below `HIGH`
+- the next session would need context to continue safely
+
+Should write `save.md` when:
+
+- the change touched 2 files with non-obvious coupling
+- validation was partial, expensive to rerun, or weakly representative
+- meaningful debug evidence should survive context loss
+- the final state would be hard to reconstruct from the diff and final chat summary alone
+
+May skip `save.md` when:
+
+- the change is successful, tiny, local, and obvious
+- validation passed
+- no external files were touched
+- no destructive/checkpoint-class action occurred
+- confidence is `HIGH`
+- the final chat summary is enough
+
+When skipping, emit the mode summary in chat and do not create or refresh `save.md` solely for that stop.
+
 ## Bounded Implementation
 
 Implementation should be narrow by default.
@@ -66,6 +103,8 @@ Hard stop:
 - Do not debug while still in implementation mode.
 - Write a concise summary to [`save.md`](/home/me/thrashl/save.md).
 - Best next mode becomes `debug`.
+
+Successful trivial bounded changes may skip [`save.md`](/home/me/thrashl/save.md) under Save Policy.
 
 ## Debug Churn Guard
 
@@ -140,7 +179,8 @@ Never invent evidence to support a hypothesis.
 
 1. replay or resume state:
 2. [`save.md`](/home/me/thrashl/save.md)
-3. [`debug-session.md`](/home/me/thrashl/debug-session.md) only as an explicit fallback when `save.md` is missing
+3. If [`save.md`](/home/me/thrashl/save.md) is absent, report `No durable save snapshot found`
+4. [`debug-session.md`](/home/me/thrashl/debug-session.md) may still be reported as active debug state, not as the durable replay snapshot
 
 Do not merge contradictory sources.
 

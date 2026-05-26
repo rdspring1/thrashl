@@ -45,6 +45,14 @@ Stop and emit a checkpoint when ANY of these are true:
 At pause, emit Failure classification: <invocation|requirement|environment|code|UNKNOWN>
 and the checkpoint summary block instead of continuing.
 
+Save decision:
+- Always maintain debug-session.md for experiments.
+- Write save.md when stopping at a checkpoint, blocker, low confidence,
+  missing source data, missing context, or handoff to another mode.
+- Write save.md when a destructive/checkpoint-class action is proposed or taken.
+- Do not write save.md after every single experiment when debug-session.md is
+  current and no durable handoff is needed.
+
 Output shape:
 
 DEBUG NOTE
@@ -90,3 +98,7 @@ Checkpoint:
 Best next mode:
 <debug|impl|vet|save|NONE>
 ```
+
+After emitting the DEBUG NOTE, apply the Save decision. If save.md is required,
+write the note to save.md in the current working directory. If save.md is
+skipped, do not create or refresh it solely for this experiment.

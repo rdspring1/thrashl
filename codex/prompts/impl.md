@@ -17,7 +17,8 @@ Rules:
 Surgical Simplicity:
 - Before the first edit, state the success criterion (one observable
   check) and the scope fence (which files you expect to touch). No
-  criterion or no fence = no edit. Write both to save.md if autonomous.
+  criterion or no fence = no edit. Write both to save.md if autonomous
+  or when Save Policy requires a durable save.
 - Edits to files outside the declared scope fence are scope drift.
   Hard stop, update save.md, then decide whether to expand the fence
   or split the task.
@@ -70,6 +71,17 @@ Hard stop:
 - If edits unexpectedly touch files outside the declared scope fence, hard stop and
   update save.md before continuing.
 
+Save decision:
+- Must write save.md for failed validation, ambiguity, blocked work,
+  cross-session handoff, nontrivial state, destructive/checkpoint-class actions,
+  external-path writes, changes touching 3+ files, unclear risk, confidence below
+  HIGH, or any state the next session would need to continue safely.
+- In impl, write save.md for any change touching multiple files.
+- May skip save.md only when the change is successful, tiny, local, obvious,
+  validated, non-destructive, and confidence is HIGH.
+- If skipping save.md, emit the IMPLEMENT SUMMARY in chat with:
+  `Save: skipped - trivial successful impl`.
+
 Output shape:
 
 IMPLEMENT SUMMARY
@@ -105,4 +117,11 @@ Risk:
 
 Best next mode:
 <impl|debug|vet|save|NONE>
+
+Save:
+<wrote save.md | skipped - trivial successful impl>
 ```
+
+After emitting the IMPLEMENT SUMMARY, apply the Save decision. If save.md is
+required, write the summary to save.md in the current working directory. If
+save.md is skipped, do not create or refresh it solely for this stop.

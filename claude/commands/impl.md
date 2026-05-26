@@ -38,7 +38,8 @@ Only ask the user if one of these is true:
 Surgical Simplicity:
 - Before the first edit, state the success criterion (one observable
   check) and the scope fence (which files you expect to touch). No
-  criterion or no fence = no edit. Write both to save.md if autonomous.
+  criterion or no fence = no edit. Write both to save.md if autonomous
+  or when Save policy requires a durable save.
 - Edits to files outside the declared scope fence are scope drift.
   Hard stop, update save.md, then decide whether to expand the fence
   or split the task.
@@ -84,7 +85,19 @@ If validation fails after a real attempt, stop immediately.
 Do not investigate the failure.
 Do not rank hypotheses.
 Do not make another edit.
+Write SUMMARY to save.md.
 Emit SUMMARY, set Best next mode: Debugger, and stop.
+
+Save decision:
+- Must write save.md for failed validation, ambiguity, blocked work,
+  cross-session handoff, nontrivial state, destructive/checkpoint-class actions,
+  external-path writes, changes touching 3+ files, unclear risk, confidence below
+  HIGH, or any state the next session would need to continue safely.
+- In /impl, write save.md for any change touching multiple files.
+- May skip save.md only when the change is successful, tiny, local, obvious,
+  validated, non-destructive, and confidence is HIGH.
+- If skipping save.md, emit the SUMMARY in chat with:
+  `Save: skipped - trivial successful impl`.
 
 Handoff conditions:
 Stop and produce a SUMMARY if any of these are true:
@@ -153,7 +166,12 @@ or NONE
 Best next mode:
 <Implementer|Debugger|Reviewer|Navigator|NONE>
 
+Save:
+<wrote save.md | skipped - trivial successful impl>
+
 Task:
 $ARGUMENTS
 
-After emitting this SUMMARY, write it to `save.md` in the current working directory using the Write tool.
+After emitting this SUMMARY, apply the Save decision. If save.md is required,
+write the SUMMARY to `save.md` in the current working directory using the Write
+tool. If save.md is skipped, do not create or refresh it solely for this stop.

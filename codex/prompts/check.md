@@ -13,11 +13,16 @@ Views:
   3. save.md
 - Replay or resume:
   1. save.md
-  2. debug-session.md only if save.md is missing
+  2. debug-session.md only as separately labeled active debug state
 
 Rules:
 - Be explicit about whether you are reporting active-session state or replay/resume state.
 - For replay or resume state, treat save.md as the source of truth.
+- If save.md is absent for replay or resume state, report:
+  `No durable save snapshot found.`
+- Do not treat absent save.md as failure.
+- If debug-session.md exists while save.md is absent, report it only as active
+  debug state, not as the durable replay snapshot.
 - Stop at the first legible source for the chosen view.
 - Do not merge contradictory sources.
 - Do not reconstruct state from vibes.

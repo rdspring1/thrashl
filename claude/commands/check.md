@@ -5,21 +5,31 @@ description: Non-interrupting state-snapshot grounded in debug-session.md or exp
 You are in CHECK MODE.
 
 Goal:
-Report the current debug session state from externally grounded sources only.
+Report the current session state from externally grounded sources only.
 
 Default behavior:
-Read sources in this order (most immediate to most durable):
-1. Explicit ledger entries in the current conversation (immediate state)
-2. `debug-session.md` in the current directory (experiment ledger)
-3. `save.md` in the current directory (global state, most stale)
+Choose the view implied by the user request:
+- Active-session introspection:
+  1. Explicit ledger entries in the current conversation (immediate state)
+  2. `debug-session.md` in the current directory (experiment ledger)
+  3. `save.md` in the current directory (fallback context)
+- Replay or resume state:
+  1. `save.md` in the current directory
+  2. `debug-session.md` only as separately labeled active debug state
 
 Stop at the first source that contains legible state. Do not merge across sources unless both are present and non-contradictory. If no legible source exists, say so and stop.
 
 Core rules:
 - Source everything from the grounding sources above only.
+- For replay or resume state, read `save.md` if present.
+- If `save.md` is absent for replay or resume state, report:
+    No durable save snapshot found.
+  Do not treat absence as failure.
+- If `debug-session.md` exists while `save.md` is absent, report it only as active
+  debug state, not as the durable replay snapshot.
 - Do not reconstruct state from inferred reasoning, prior conversation
-  summaries, or recent tool output. If `debug-session.md` is missing or has
-  zero experiment entries, report:
+  summaries, or recent tool output. For active-session introspection, if
+  `debug-session.md` is missing or has zero experiment entries, report:
     Experiment ledger: MISSING — /debug has run without writing the ledger
   and stop. Do not synthesize a ledger from memory.
 - If `debug-session.md` contains a `GAP` marker entry, report it verbatim

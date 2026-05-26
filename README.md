@@ -68,7 +68,7 @@ The Codex port keeps the same control model:
 - bounded implementation
 - hypothesis-first debugging
 - evidence discipline
-- replayable state in `save.md`
+- conditional durable replay state in `save.md`
 
 But it uses Codex-native surfaces instead of imitating Claude commands:
 - `AGENTS.md` as the main doctrine file

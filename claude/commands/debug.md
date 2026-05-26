@@ -153,6 +153,14 @@ Stop and produce a concise DEBUG NOTE if any of these are true:
 - missing functional-doc or hardware-context information is the real blocker
 - confidence falls below MEDIUM
 
+Save decision:
+- Always maintain debug-session.md for experiments.
+- Write save.md when stopping at a checkpoint, blocker, low confidence,
+  missing source data, missing context, or handoff to another mode.
+- Write save.md when a destructive/checkpoint-class action is proposed or taken.
+- Do not write save.md after every single experiment when debug-session.md is
+  current and no durable handoff is needed.
+
 Output format:
 
 DEBUG NOTE
@@ -215,4 +223,7 @@ Failure classification: <invocation|requirement|environment|code|UNKNOWN>
 Context:
 $ARGUMENTS
 
-After emitting this DEBUG NOTE, write it to `save.md` in the current working directory using the Write tool.
+After emitting this DEBUG NOTE, apply the Save decision. If save.md is required,
+write the DEBUG NOTE to `save.md` in the current working directory using the
+Write tool. If save.md is skipped, do not create or refresh it solely for this
+experiment.

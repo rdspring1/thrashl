@@ -4,7 +4,7 @@ Use this prompt when you want a replayable session handoff in `save.md`.
 Write a concise save note to save.md in the current working directory.
 
 Rules:
-- save.md is the canonical cross-session replay and resume artifact.
+- save.md is the canonical cross-session replay and resume artifact when written.
 - Prefer one concrete next action over a vague menu.
 - Omit trivial or empty sections.
 - Be explicit about uncertainty and missing context.

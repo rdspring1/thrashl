@@ -7,8 +7,11 @@ The first eval, `impl-first-failure`, checks that `/impl` behaves like a bounded
 - make one bounded change
 - run one validation command
 - stop immediately on meaningful failure
-- write a replayable handoff
+- write a replayable handoff when failure/blocker/replay value exists
 - route to `Debugger` instead of self-debugging
+
+`impl-trivial-success-no-save` covers the opposite boundary: a tiny successful
+one-file `/impl` change should validate once and skip `save.md`.
 
 ## Layout
 

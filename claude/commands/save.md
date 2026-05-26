@@ -4,7 +4,8 @@ description: Save the current state as a concise markdown handoff
 
 Produce a SAVE NOTE and write it to `save.md` in the current working directory.
 
-`save.md` is the canonical state file. `/check`, `/debug`, and the next session read from it.
+`save.md` is the canonical state file when written. `/check`, `/debug`, and the
+next session read from it when durable replay state exists.
 
 Default behavior:
 - If no explicit context is provided, summarize the current conversation/task state.

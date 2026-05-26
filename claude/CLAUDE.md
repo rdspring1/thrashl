@@ -120,6 +120,40 @@
 - Prefer a note that is useful tomorrow without rereading the whole chat.
 - Keep save notes decision-oriented: current state, blocker if any, next action, why, expected outcome, confidence, risk, and missing context when relevant.
 
+## Save policy
+
+`save.md` is the canonical cross-session replay and resume artifact when it is written.
+Not every mode exit requires writing `save.md`.
+
+Write `save.md` only when durable replay/resume value is high. A concise chat summary is enough when work is successful, tiny, local, obvious, validated, non-destructive, and confidence is `HIGH`.
+
+Must write `save.md` when:
+- the user explicitly asks to save
+- stopping due to failure, blocker, ambiguity, missing source data, or missing context
+- crossing mode boundaries after nontrivial work
+- validation failed, or expected validation could not be run
+- a destructive/checkpoint-class action was proposed or taken
+- an external-path write was proposed or taken
+- work touched 3+ files
+- confidence is below `HIGH`
+- the next session would need context to continue safely
+
+Should write `save.md` when:
+- the change touched 2 files with non-obvious coupling
+- validation was partial, expensive to rerun, or weakly representative
+- meaningful debug evidence should survive context loss
+- the final state would be hard to reconstruct from the diff and final chat summary alone
+
+May skip `save.md` when:
+- the change is successful, tiny, local, and obvious
+- validation passed
+- no external files were touched
+- no destructive/checkpoint-class action occurred
+- confidence is `HIGH`
+- the final chat summary is enough
+
+When skipping, emit the mode summary in chat and do not create or refresh `save.md` solely for that stop.
+
 ## Exploration preference
 - For exploration, answer the specific codebase question first, then provide supporting file, symbol, or call-path references.
 - During exploration, do not drift into implementation unless explicitly asked.

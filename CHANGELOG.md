@@ -1,5 +1,44 @@
 # Changelog
 
+## [0.18.0] - 2026-05-26
+
+### Changed
+
+**Doctrine** (`claude/CLAUDE.md`, `codex/AGENTS.md`)
+
+- Added **Save Policy**. `save.md` remains the canonical cross-session replay and resume artifact when written, but not every mode exit requires a durable file write. Saves are now required for failure, blockers, ambiguity, missing context/source data, nontrivial mode handoffs, failed or skipped validation, destructive/checkpoint-class actions, external-path writes, 3+ touched files, confidence below HIGH, explicit user save requests, or any state the next session would need to continue safely. Tiny successful local changes with passing validation and HIGH confidence may use the chat summary only.
+
+**Commands** (`claude/commands/`)
+
+- `impl.md` - Replaced the unconditional final `save.md` write with a Save decision. Failed validation still stops immediately, writes `save.md`, and routes to Debugger. Successful trivial one-file implementations can now emit `Save: skipped - trivial successful impl` without creating or refreshing `save.md`; multi-file `/impl` changes still write `save.md`.
+- `debug.md` - Kept `debug-session.md` strict for experiment logging while making `save.md` checkpoint/handoff-only. `/debug` writes `save.md` at checkpoints, blockers, low confidence, missing source data/context, destructive/checkpoint-class actions, or handoff to another mode, but not after every single experiment.
+- `check.md` - Split active introspection from replay/resume behavior. Replay reads `save.md` when present and reports `No durable save snapshot found.` when absent; `debug-session.md` may still be reported as active debug state, not as the durable replay snapshot.
+- `save.md` - Clarified that `save.md` is canonical when written.
+
+**Codex** (`codex/`)
+
+- `prompts/impl.md`, `prompts/debug.md`, `prompts/check.md`, and `prompts/save.md` - Mirrored the Claude-side conditional save behavior.
+- `scripts/check_state.py` - `--view replay` now reports `No durable save snapshot found.` with exit code 0 when `save.md` is absent, and labels `debug-session.md` as active debug state instead of a replay fallback.
+- `scripts/check_parity.py` - Added parity coverage for the conditional save policy and updated canonical-save wording.
+- `README.md` - Updated Codex docs to describe conditional durable replay state.
+
+**README**
+
+- Updated the top-level Codex summary to describe conditional durable replay state in `save.md`.
+
+### Added
+
+**Evals** (`claude/evals/fixtures/`, `codex/evals/fixtures/`)
+
+- `claude/evals/fixtures/impl-trivial-success-no-save/` - Verifies that a tiny successful one-file `/impl` edit runs validation once and does not write `save.md`.
+- `codex/evals/fixtures/codex-impl-trivial-success-no-save/` - Codex mirror of the trivial successful no-save boundary.
+
+### Updated
+
+**Evals** (`claude/evals/README.md`, `codex/evals/README.md`)
+
+- Clarified that existing failed-validation evals still require `save.md` because failure/blocker/replay value exists, while the new trivial-success eval covers the optional-save path.
+
 ## [0.17.0] - 2026-05-22
 
 ### Changed

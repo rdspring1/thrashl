@@ -7,8 +7,11 @@ The first eval, `codex-impl-first-failure`, checks that the Codex `impl` prompt 
 - make one bounded change
 - run one validation command
 - stop immediately on meaningful failure
-- write a replayable handoff to `save.md`
+- write a replayable handoff to `save.md` when failure/blocker/replay value exists
 - route to `debug` instead of self-debugging
+
+`codex-impl-trivial-success-no-save` covers the opposite boundary: a tiny
+successful one-file `impl` change should validate once and skip `save.md`.
 
 ## Layout
 

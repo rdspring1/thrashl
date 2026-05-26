@@ -69,7 +69,7 @@ def main() -> int:
         sys.stdout.write(
             "No legible active state found in debug-session.md or save.md.\n"
         )
-        return 1
+        return 0
 
     if save_text:
         return emit(
@@ -79,15 +79,15 @@ def main() -> int:
             save_text,
         )
     if debug_text:
-        return emit(
-            "replay",
-            debug_path,
-            "active debug ledger fallback because save.md is missing",
-            debug_text,
+        sys.stdout.write(
+            "No durable save snapshot found.\n\n"
+            "Active debug state is available in debug-session.md:\n\n"
+            f"{debug_text}\n"
         )
+        return 0
 
-    sys.stdout.write("No legible replay state found in save.md or debug-session.md.\n")
-    return 1
+    sys.stdout.write("No durable save snapshot found.\n")
+    return 0
 
 
 if __name__ == "__main__":

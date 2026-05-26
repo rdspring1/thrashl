@@ -40,12 +40,31 @@ RULES = (
         claude_files=("claude/commands/impl.md",),
         claude_patterns=(
             "emit summary, set best next mode: debugger, and stop.",
-            "write it to `save.md`",
+            "write summary to save.md.",
         ),
         codex_files=("codex/AGENTS.md", "codex/prompts/impl.md"),
         codex_patterns=(
             "best next mode becomes `debug`.",
             "write a concise handoff to save.md.",
+        ),
+    ),
+    Rule(
+        name="conditional save policy",
+        claude_files=("claude/CLAUDE.md", "claude/commands/impl.md", "claude/commands/debug.md"),
+        claude_patterns=(
+            "not every mode exit requires writing `save.md`.",
+            "must write `save.md` when:",
+            "may skip `save.md` when:",
+            "save: skipped - trivial successful impl",
+            "do not write save.md after every single experiment",
+        ),
+        codex_files=("codex/AGENTS.md", "codex/prompts/impl.md", "codex/prompts/debug.md"),
+        codex_patterns=(
+            "not every mode exit requires writing `save.md`.",
+            "must write `save.md` when:",
+            "may skip `save.md` when:",
+            "save: skipped - trivial successful impl",
+            "do not write save.md after every single experiment",
         ),
     ),
     Rule(
@@ -68,11 +87,11 @@ RULES = (
         name="save.md as canonical replay artifact",
         claude_files=("claude/commands/save.md",),
         claude_patterns=(
-            "`save.md` is the canonical state file.",
+            "`save.md` is the canonical state file when written.",
         ),
         codex_files=("codex/AGENTS.md", "codex/README.md", "codex/prompts/save.md"),
         codex_patterns=(
-            "canonical cross-session replay and resume artifact",
+            "canonical cross-session replay and resume artifact when written",
         ),
     ),
     Rule(
